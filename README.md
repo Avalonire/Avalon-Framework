@@ -1,1 +1,2 @@
-# Avalon_framework
+# Avalon Framework
+Реализован с помощью WSGIref
