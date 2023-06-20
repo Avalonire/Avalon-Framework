@@ -8,4 +8,4 @@ class Index:
 
 class Info:
     def __call__(self, request):
-        return '200 OK', 'about'
+        return '200 OK', 'FUTURE CONTACTS'
