@@ -10,9 +10,9 @@ class PageNotFound:
 
 class Framework:
 
-    def __init__(self, routes, fronts):
-        self.routes = routes
-        self.fronts = fronts
+    def __init__(self, routes_obj, fronts_obj):
+        self.routes_lst = routes_obj
+        self.fronts_lst = fronts_obj
 
     def __call__(self, environ, start_response):
         path = environ['PATH_INFO']
@@ -34,12 +34,12 @@ class Framework:
             request['request_params'] = Framework.decode_value(request_params)
             print(f'Received GET parameters: {request}')
 
-        if path in self.routes:
-            view = self.routes[path]
+        if path in self.routes_lst:
+            view = self.routes_lst[path]
         else:
             view = PageNotFound()
 
-        for front in self.fronts:
+        for front in self.fronts_lst:
             front(request)
 
         code, body = view(request)
