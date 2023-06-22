@@ -8,4 +8,4 @@ class Index:
 
 class Info:
     def __call__(self, request):
-        return '200 OK', 'FUTURE CONTACTS'
+        return '200 OK', render('contacts.html', date=request.get('date', None))
