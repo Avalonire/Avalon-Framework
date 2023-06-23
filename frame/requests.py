@@ -30,12 +30,12 @@ class PostRequest:
         return result
 
     @staticmethod
-    def get_wsgi_input_data(env):
-        content_length_data = env.get('CONTENT_LENGTH')
+    def get_wsgi_input_data(environ):
+        content_length_data = environ.get('CONTENT_LENGTH')
         content_length = int(content_length_data) if content_length_data else 0
-        print(content_length)
+        print('Content Length:', content_length)
 
-        data = env['wsgi.input'].read(content_length) if content_length > 0 else b''
+        data = environ['wsgi.input'].read(content_length) if content_length > 0 else b''
         return data
 
     def parse_wsgi_input_data(self, data: bytes):
@@ -46,7 +46,7 @@ class PostRequest:
             result = self.parse_input_data(data_str)
         return result
 
-    def get_request_params(self, env):
-        data = self.get_wsgi_input_data(env)
+    def get_request_params(self, environ):
+        data = self.get_wsgi_input_data(environ)
         data = self.parse_wsgi_input_data(data)
         return data
