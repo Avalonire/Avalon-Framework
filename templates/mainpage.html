@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block style %}
+{% include "style.html" %}
+{% endblock %}
+
+{% block menu %}
+{% include "menu.html" %}
+{% endblock %}
+
+{% block body %}
+
+<div id="main">
+    <div id="site_content">
+
+        {% block sidebar %}
+        {% include "sidebar.html" %}
+        {% endblock %}
+
+        <div id="content">
+            <h1>Welcome to Respect the Queue clan page</h1>
+            <p>This is standard compliant with future guild information and history!
+                With hyperlinks and fun stories.</p>
+
+            <h2>If you want to Join!</h2>
+            <p>Follow this steps:</p>
+            <ul>
+                <li>1. Register</li>
+                <li>2. Make an application</li>
+                <li>3. Wait for approval!</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
