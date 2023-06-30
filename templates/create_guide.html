@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block style %}
+{% include "style.html" %}
+{% endblock %}
+
+{% block menu %}
+{% include "menu.html" %}
+{% endblock %}
+
+{% block body %}
+<div id="main">
+    <div id="site_content">
+
+        {% block sidebar %}
+        {% include "sidebar.html" %}
+        {% endblock %}
+
+        <div id="content">
+            <h1>Create guide for category "{{name}}"</h1>
+            <form method="post">
+                <input type="text" name="name" placeholder="Title">
+                <button type="submit">Save guide</button>
+            </form>
+        </div>
+
+
+    </div>
+</div>
+
+
+{% endblock %}

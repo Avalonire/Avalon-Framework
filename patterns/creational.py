@@ -40,7 +40,7 @@ class GuidePrototype:
 
 class Guide(GuidePrototype):
 
-    def __int__(self, name, category):
+    def __init__(self, name, category):
         self.name = name
         self.category = category
         self.category.guides.append(self)
@@ -81,15 +81,15 @@ class Category:
         self.category = category
         self.guides = []
 
-    def guides_count(self):
+    def guide_count(self):
         result = len(self.guides)
         if self.category:
-            result += self.category.guides_count()
+            result += self.category.guide_count()
         return result
 
 
 class Engine:
-    def __int__(self):
+    def __init__(self):
         self.officer = []
         self.member = []
         self.candidate = []
@@ -123,33 +123,33 @@ class Engine:
 
     @staticmethod
     def decode_value(val):
-        val_bytes = bytes(val.replace('%', '=').replace("+", " "), 'UTF-8')
-        decode_str = decodestring(val_bytes)
-        return decode_str
+        val_b = bytes(val.replace('%', '=').replace("+", " "), 'UTF-8')
+        decode_str = decodestring(val_b)
+        return decode_str.decode('UTF-8')
 
 
-class SingletonByName(type):
+# class Singleton(type):
+#
+#     def __init__(cls, name, bases, attrs, **kwargs):
+#         super().__init__(name, bases, attrs)
+#         cls.__instance = {}
+#
+#     def __call__(cls, *args, **kwargs):
+#         if args:
+#             name = args[0]
+#         if kwargs:
+#             name = kwargs['name']
+#
+#         if name in cls.__instance:
+#             return cls.__instance[name]
+#         else:
+#             cls.__instance[name] = super().__call__(*args, **kwargs)
+#             return cls.__instance[name]
 
-    def __init__(cls, name, bases, attrs, **kwargs):
-        super().__init__(name, bases, attrs)
-        cls.__instance = {}
 
-    def __call__(cls, *args, **kwargs):
-        if args:
-            name = args[0]
-        if kwargs:
-            name = kwargs['name']
+class Logger:
 
-        if name in cls.__instance:
-            return cls.__instance[name]
-        else:
-            cls.__instance[name] = super().__call__(*args, **kwargs)
-            return cls.__instance[name]
-
-
-class Logger(metaclass=SingletonByName):
-
-    def __int__(self, name):
+    def __init__(self, name):
         self.name = name
 
     @staticmethod
