@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block style %}
+{% include "style.html" %}
+{% endblock %}
+
+{% block menu %}
+{% include "menu.html" %}
+{% endblock %}
+
+{% block body %}
+
+<div id="main">
+    <div id="site_content">
+
+        {% block sidebar %}
+        {% include "sidebar.html" %}
+        {% endblock %}
+
+        <div id="content">
+                <button class="button">
+                    <a href="/create_category/">Create new guide category</a>
+                </button>
+
+            <h1>Guides category list</h1>
+            <ul>
+                {% for item in objects_list %}
+                <li>
+                    <h4>{{item.name}}</h4>
+                    <span>Guide count: {{item.guide_count()}}</span>
+                    <a href="/guides/?id={{item.id}}">Show Guides</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
