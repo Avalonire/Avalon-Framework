@@ -21,5 +21,4 @@ routes = {
     '/create_guide/': CreateGuide(),
     '/create_category/': CreateCategory(),
     '/copy_guide/': CopyGuide(),
-    # '/categories/': CategoryList(),
 }
