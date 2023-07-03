@@ -1,6 +1,7 @@
 from wsgiref.simple_server import make_server, WSGIServer, WSGIRequestHandler
 from frame.main import Framework
-from urls import routes, fronts
+from urls import fronts
+from views import routes
 
 
 app = Framework(routes, fronts)

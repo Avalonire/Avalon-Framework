@@ -1,9 +1,10 @@
-from datetime import date
 from frame.jinja_plater import render
 from patterns.creational import Engine, Logger
+from patterns.structures import AppRoute
 
 site = Engine()
 logger = Logger('main')
+routes = {}
 
 
 class NotFound404:
@@ -11,23 +12,27 @@ class NotFound404:
         return '404 WHAT', '404 PAGE Not Found'
 
 
+@AppRoute(routes=routes, url='/')
 class Index:
     def __call__(self, request):
         # return '200 OK', 'MAIN PAGE'
         return '200 OK', render('mainpage.html', date=request.get('date', None))
 
 
+@AppRoute(routes=routes, url='/info/')
 class Info:
     def __call__(self, request):
         # return '200 OK', 'CONTACTS PAGE'
         return '200 OK', render('contacts.html', date=request.get('date', None))
 
 
+@AppRoute(routes=routes, url='/topics/')
 class GuidesTopics:
     def __call__(self, request):
         return '200 OK', render('guides_topics.html', objects_list=site.categories)
 
 
+@AppRoute(routes=routes, url='/guides/')
 class Guides:
     def __call__(self, request):
         logger.log('guides list')
@@ -41,6 +46,7 @@ class Guides:
             return '200 OK', 'No guides have been added yet'
 
 
+@AppRoute(routes=routes, url='/create_guide/')
 class CreateGuide:
     category_id = -1
 
@@ -71,6 +77,7 @@ class CreateGuide:
                 return '200 OK', 'No guides have been added yet'
 
 
+@AppRoute(routes=routes, url='/create_category/')
 class CreateCategory:
     def __call__(self, request):
 
@@ -94,13 +101,7 @@ class CreateCategory:
                                     categories=categories)
 
 
-class CategoryList:
-    def __call__(self, request):
-        logger.log('Category list')
-        return '200 OK', render('category_list.html',
-                                objects_list=site.categories)
-
-
+@AppRoute(routes=routes, url='/copy_guide/')
 class CopyGuide:
     def __call__(self, request):
         request_params = request['request_params']
@@ -119,3 +120,9 @@ class CopyGuide:
                                         name=new_guide.category.name)
         except KeyError:
             return '200 OK', 'No guides have been added yet'
+
+# class CategoryList:
+#     def __call__(self, request):
+#         logger.log('Category list')
+#         return '200 OK', render('category_list.html',
+#                                 objects_list=site.categories)
