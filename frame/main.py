@@ -54,3 +54,28 @@ class Framework:
             val_decode_str = decodestring(val).decode('UTF-8')
             new_data[k] = val_decode_str
         return new_data
+
+
+class DebugApp(Framework):
+    """
+    Application framework with debug settings
+    """
+
+    def __init__(self, routes_obj, fronts_obj):
+        self.application = Framework(routes_obj, fronts_obj)
+        super().__init__(routes_obj, fronts_obj)
+
+    def __call__(self, env, start_response):
+        print('DEBUG MODE\n', env)
+        return self.application(env, start_response)
+
+
+class FakeApp(Framework):
+
+    def __init__(self, routes_obj, fronts_obj):
+        self.application = Framework(routes_obj, fronts_obj)
+        super().__init__(routes_obj, fronts_obj)
+
+    def __call__(self, env, start_response):
+        start_response('200 OK', [('Content-Type', 'text/html')])
+        return [b'--- FAKE APPLICATION RUNING ---']
