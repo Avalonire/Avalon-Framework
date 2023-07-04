@@ -1,6 +1,6 @@
 from frame.jinja_plater import render
 from patterns.creational import Engine, Logger
-from patterns.structures import AppRoute
+from patterns.structures import AppRoute, TimeLogger
 
 site = Engine()
 logger = Logger('main')
@@ -14,6 +14,7 @@ class NotFound404:
 
 @AppRoute(routes=routes, url='/')
 class Index:
+    @TimeLogger('mainpage')
     def __call__(self, request):
         # return '200 OK', 'MAIN PAGE'
         return '200 OK', render('mainpage.html', date=request.get('date', None))
@@ -21,6 +22,7 @@ class Index:
 
 @AppRoute(routes=routes, url='/info/')
 class Info:
+    @TimeLogger('contacts')
     def __call__(self, request):
         # return '200 OK', 'CONTACTS PAGE'
         return '200 OK', render('contacts.html', date=request.get('date', None))
@@ -28,12 +30,14 @@ class Info:
 
 @AppRoute(routes=routes, url='/topics/')
 class GuidesTopics:
+    @TimeLogger('topics')
     def __call__(self, request):
         return '200 OK', render('guides_topics.html', objects_list=site.categories)
 
 
 @AppRoute(routes=routes, url='/guides/')
 class Guides:
+    @TimeLogger('guides')
     def __call__(self, request):
         logger.log('guides list')
         try:
@@ -50,6 +54,7 @@ class Guides:
 class CreateGuide:
     category_id = -1
 
+    @TimeLogger('guides')
     def __call__(self, request):
         if request['method'] == 'POST':
             data = request['data']
@@ -79,6 +84,7 @@ class CreateGuide:
 
 @AppRoute(routes=routes, url='/create_category/')
 class CreateCategory:
+    @TimeLogger('topics')
     def __call__(self, request):
 
         if request['method'] == 'POST':
@@ -120,9 +126,3 @@ class CopyGuide:
                                         name=new_guide.category.name)
         except KeyError:
             return '200 OK', 'No guides have been added yet'
-
-# class CategoryList:
-#     def __call__(self, request):
-#         logger.log('Category list')
-#         return '200 OK', render('category_list.html',
-#                                 objects_list=site.categories)

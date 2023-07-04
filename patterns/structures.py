@@ -1,3 +1,6 @@
+from time import time
+
+
 # Routes decorator
 class AppRoute:
     def __init__(self, routes, url):
@@ -8,11 +11,21 @@ class AppRoute:
         self.routes[self.url] = cls()
 
 
-class Debug:
+class TimeLogger:
     def __init__(self, name):
-        pass
+        self.name = name
 
+    def __call__(self, cls):
+        def logit(method):
+            def logged(*args, **kwargs):
+                ts = time()
+                result = method(*args, **kwargs)
+                te = time()
+                delta = te - ts
+                print(f'Log -> {self.name}')
+                print(f'Page loading {delta:2.2f} ms')
+                return result
 
-class Logger:
-    def __init__(self):
-        pass
+            return logged
+
+        return logit(cls)
