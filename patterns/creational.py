@@ -4,7 +4,8 @@ from quopri import decodestring
 
 # Users architecture
 class User:
-    pass
+    def __init__(self, name):
+        self.name = name
 
 
 class Officer(User):
@@ -16,7 +17,10 @@ class Member(User):
 
 
 class Candidate(User):
-    pass
+
+    def __init__(self, name):
+        self.guides = []
+        super().__init__(name)
 
 
 class UserFactory:
@@ -27,8 +31,8 @@ class UserFactory:
     }
 
     @classmethod
-    def create(cls, _type):
-        return cls.types[_type]()
+    def create(cls, _type, name):
+        return cls.types[_type](name)
 
 
 # Guides architecture
@@ -97,8 +101,8 @@ class Engine:
         self.categories = []
 
     @staticmethod
-    def create_user(_type):
-        return UserFactory.create(_type)
+    def create_user(_type, name):
+        return UserFactory.create(_type, name)
 
     @staticmethod
     def create_category(name, category=None):
@@ -120,6 +124,11 @@ class Engine:
             if item.name == name:
                 return item
         return None
+
+    def get_candidate(self, name) -> Candidate:
+        for item in self.candidate:
+            if item.name == name:
+                return item
 
     @staticmethod
     def decode_value(val):
