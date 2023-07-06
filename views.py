@@ -1,10 +1,14 @@
 from frame.jinja_plater import render
 from patterns.creational import Engine, Logger
 from patterns.structures import AppRoute, TimeLogger
+from patterns.behavioral import EmailNotifier, SmsNotifier, \
+    ListView, CreateView, BaseSerializer
 
 site = Engine()
 logger = Logger('main')
 routes = {}
+email_notifier = EmailNotifier()
+sms_notifier = SmsNotifier()
 
 
 class NotFound404:
@@ -126,3 +130,47 @@ class CopyGuide:
                                         name=new_guide.category.name)
         except KeyError:
             return '200 OK', 'No guides have been added yet'
+
+
+@AppRoute(routes=routes, url='/candidate-list/')
+class StudentListView(ListView):
+    queryset = site.candidate
+    template_name = 'student_list.html'
+
+
+@AppRoute(routes=routes, url='/create-candidate/')
+class StudentCreateView(CreateView):
+    template_name = 'create_candidate.html'
+
+    def create_obj(self, data: dict):
+        name = data['name']
+        name = site.decode_value(name)
+        new_obj = site.create_user('student', name)
+        site.candidate.append(new_obj)
+
+
+@AppRoute(routes=routes, url='/add-candidate/')
+class AddStudentByCourseCreateView(CreateView):
+    template_name = 'add_candidate.html'
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['guides'] = site.guides
+        context['candidate'] = site.candidate
+        return context
+
+    def create_obj(self, data: dict):
+        course_name = data['course_name']
+        course_name = site.decode_value(course_name)
+        course = site.get_guide(course_name)
+        candidate_name = data['student_name']
+        candidate_name = site.decode_value(candidate_name)
+        candidate = site.get_candidate(candidate_name)
+        course.add_candidate(candidate)
+
+
+@AppRoute(routes=routes, url='/api/')
+class CourseApi:
+    @TimeLogger(name='GuideApi')
+    def __call__(self, request):
+        return '200 OK', BaseSerializer(site.guides).save()
