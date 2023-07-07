@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block style %}
+{% include "style.html" %}
+{% endblock %}
+
+{% block menu %}
+{% include "menu.html" %}
+{% endblock %}
+
+{% block body %}
+
+<div id="main">
+
+    <div id="site_content">
+
+        {% block sidebar %}
+        {% include "sidebar.html" %}
+        {% endblock %}
+        <div id="content">
+            <div>
+                <ul>
+                    <li>
+                        <button class="button">
+                            <a href="/create-candidate/">Create candidate</a>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="button">
+                            <a href="/add-candidate/">Add candidate to guide</a>
+                        </button>
+
+                    </li>
+                </ul>
+            </div>
+            <h1>Candidate list</h1>
+            <div>
+
+                {% for item in objects_list %}
+                <li>
+                    {{item.name}}
+                    {% for guide in item.guides %}
+                    {{guide.name}}
+                    {% endfor %}
+                </li>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

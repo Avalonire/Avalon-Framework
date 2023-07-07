@@ -135,7 +135,7 @@ class CopyGuide:
 @AppRoute(routes=routes, url='/candidate-list/')
 class StudentListView(ListView):
     queryset = site.candidate
-    template_name = 'student_list.html'
+    template_name = 'candidate_list.html'
 
 
 @AppRoute(routes=routes, url='/create-candidate/')
@@ -145,7 +145,7 @@ class StudentCreateView(CreateView):
     def create_obj(self, data: dict):
         name = data['name']
         name = site.decode_value(name)
-        new_obj = site.create_user('student', name)
+        new_obj = site.create_user('candidate', name)
         site.candidate.append(new_obj)
 
 
@@ -160,13 +160,13 @@ class AddStudentByCourseCreateView(CreateView):
         return context
 
     def create_obj(self, data: dict):
-        course_name = data['course_name']
-        course_name = site.decode_value(course_name)
-        course = site.get_guide(course_name)
-        candidate_name = data['student_name']
+        guide_name = data['guide_name']
+        guide_name = site.decode_value(guide_name)
+        guide = site.get_guide(guide_name)
+        candidate_name = data['candidate_name']
         candidate_name = site.decode_value(candidate_name)
         candidate = site.get_candidate(candidate_name)
-        course.add_candidate(candidate)
+        guide.add_candidate(candidate)
 
 
 @AppRoute(routes=routes, url='/api/')

@@ -1,5 +1,6 @@
 from copy import deepcopy
 from quopri import decodestring
+from patterns.behavioral import FileWriter, Subject
 
 
 # Users architecture
@@ -25,9 +26,9 @@ class Candidate(User):
 
 class UserFactory:
     types = {
-        'Officer': Officer,
-        'Member': Member,
-        'Candidate': Candidate
+        'officer': Officer,
+        'member': Member,
+        'candidate': Candidate
     }
 
     @classmethod
@@ -42,12 +43,22 @@ class GuidePrototype:
         return deepcopy(self)
 
 
-class Guide(GuidePrototype):
+class Guide(GuidePrototype, Subject):
 
     def __init__(self, name, category):
         self.name = name
         self.category = category
         self.category.guides.append(self)
+        self.candidates = []
+        super().__init__()
+
+    def __getitem__(self, item):
+        return self.candidates[item]
+
+    def add_candidate(self, candidate: Candidate):
+        self.candidates.append(candidate)
+        candidate.guides.append(self)
+        self.notify()
 
 
 class VideoGuide(Guide):
@@ -125,7 +136,7 @@ class Engine:
                 return item
         return None
 
-    def get_candidate(self, name) -> Candidate:
+    def get_candidate(self, name):
         for item in self.candidate:
             if item.name == name:
                 return item
@@ -139,9 +150,10 @@ class Engine:
 
 class Logger:
 
-    def __init__(self, name):
+    def __init__(self, name, writer=FileWriter()):
         self.name = name
+        self.writer = writer
 
-    @staticmethod
-    def log(text):
-        print('Logging: ', text)
+    def log(self, text):
+        text = f'(!) Loging ---> {text}'
+        self.writer.write(text)

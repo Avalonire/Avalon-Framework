@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block style %}
+{% include "style.html" %}
+{% endblock %}
+
+{% block menu %}
+{% include "menu.html" %}
+{% endblock %}
+
+{% block body %}
+
+<div id="main">
+
+    <div id="site_content">
+
+        {% block sidebar %}
+        {% include "sidebar.html" %}
+        {% endblock %}
+        <div id="content">
+            <div>
+                <ul>
+                    <li>
+                        <button class="button">
+                            <a href="/candidate-list/">Candidate list</a>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h1>create candidate</h1>
+                <form method="post">
+                    <input type="text" name="name" placeholder="name">
+                    <button type="submit">save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
