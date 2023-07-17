@@ -1,7 +1,8 @@
 from copy import deepcopy
 from quopri import decodestring
+from sqlite3 import connect
 from patterns.behavioral import FileWriter, Subject
-from arhitect import DomainObject
+from patterns.arhitect import DomainObject
 
 
 # Users architecture
@@ -18,7 +19,7 @@ class Member(User):
     pass
 
 
-class Candidate(User):
+class Candidate(User, DomainObject):
 
     def __init__(self, name):
         self.guides = []
